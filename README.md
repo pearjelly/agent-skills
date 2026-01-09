@@ -18,6 +18,7 @@ agent-skills/
 │   └── scripts/
 │       ├── install.sh      # 安装脚本
 │       ├── login.sh        # 登录脚本
+│       ├── prepare.sh      # 准备脚本（自动登录并启动 MCP）
 │       ├── start.sh        # 启动 MCP 服务
 │       ├── stop.sh         # 停止 MCP 服务
 │       ├── status.sh       # 状态检查脚本
@@ -78,27 +79,23 @@ agent-skills/
    ./scripts/install.sh
    ```
 
-2. **登录小红书**
+2. **首次准备（登录并启动 MCP）**
    ```bash
-   ./scripts/login.sh
+   cd ~/.claude/skills/xiaohongshu-content-creator && ./scripts/prepare.sh
    ```
+   此脚本会自动检查登录状态，未登录则启动登录流程，然后启动 MCP 服务。
 
-3. **启动 MCP 服务**
-   ```bash
-   ./scripts/start.sh
-   ```
-
-4. **注册到 Claude Code**
+3. **注册到 Claude Code**
    ```bash
    claude mcp add --transport http xiaohongshu-mcp http://localhost:18060/mcp
    ```
 
-5. **检查服务状态**
+4. **检查服务状态**
    ```bash
    ./scripts/status.sh
    ```
 
-6. **停止服务**
+5. **停止服务**
    ```bash
    ./scripts/stop.sh
    ```
@@ -122,6 +119,16 @@ agent-skills/
 - **自动化脚本**：提供安装、登录、启动、停止、状态检查等便捷脚本
 
 ## 脚本说明
+
+### prepare.sh
+一键准备脚本，自动检查登录状态并启动 MCP 服务：
+- 检查是否已登录，未登录则启动登录流程
+- 启动 xiaohongshu-mcp 服务
+- 首次使用前请先运行此脚本
+
+```bash
+cd ~/.claude/skills/xiaohongshu-content-creator && ./scripts/prepare.sh
+```
 
 ### install.sh
 自动检测系统架构并下载最新版本的 xiaohongshu-mcp 二进制文件。支持 macOS (arm64/amd64)、Linux (amd64) 和 Windows (amd64)。

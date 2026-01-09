@@ -22,7 +22,7 @@ fi
 
 # 检查是否已启动
 if [ -f "$PID_FILE" ]; then
-    local pid=$(cat "$PID_FILE")
+    pid=$(cat "$PID_FILE")
     if kill -0 "$pid" 2>/dev/null; then
         echo "错误: xiaohongshu-mcp 已在运行 (PID: $pid)"
         exit 1
