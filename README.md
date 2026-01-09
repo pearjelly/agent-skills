@@ -14,7 +14,16 @@
 ```
 agent-skills/
 ├── xiaohongshu-content-creator/
-│   └── SKILL.md
+│   ├── SKILL.md
+│   └── scripts/
+│       ├── install.sh      # 安装脚本
+│       ├── login.sh        # 登录脚本
+│       ├── start.sh        # 启动 MCP 服务
+│       ├── stop.sh         # 停止 MCP 服务
+│       ├── status.sh       # 状态检查脚本
+│       └── bin/            # 二进制文件目录（git 忽略）
+├── .gitignore
+├── README.md
 └── IFLOW.md
 ```
 
@@ -57,7 +66,42 @@ agent-skills/
 - `publish_with_video` - 发布视频
 - `check_login_status` - 检查登录状态
 
+**工具来源：** https://github.com/xpzouying/xiaohongshu-mcp
+
 ## 使用方法
+
+### 安装和配置（xiaohongshu-content-creator）
+
+1. **安装工具**
+   ```bash
+   cd xiaohongshu-content-creator
+   ./scripts/install.sh
+   ```
+
+2. **登录小红书**
+   ```bash
+   ./scripts/login.sh
+   ```
+
+3. **启动 MCP 服务**
+   ```bash
+   ./scripts/start.sh
+   ```
+
+4. **注册到 Claude Code**
+   ```bash
+   claude mcp add --transport http xiaohongshu-mcp http://localhost:18060/mcp
+   ```
+
+5. **检查服务状态**
+   ```bash
+   ./scripts/status.sh
+   ```
+
+6. **停止服务**
+   ```bash
+   ./scripts/stop.sh
+   ```
 
 ### 添加新技能
 1. 创建新的技能目录
@@ -75,9 +119,27 @@ agent-skills/
 - **标准化格式**：所有技能使用统一的 SKILL.md 模板
 - **可扩展性**：易于添加新的技能定义
 - **文档驱动**：完整的技能说明和使用指南
+- **自动化脚本**：提供安装、登录、启动、停止、状态检查等便捷脚本
+
+## 脚本说明
+
+### install.sh
+自动检测系统架构并下载最新版本的 xiaohongshu-mcp 二进制文件。支持 macOS (arm64/amd64)、Linux (amd64) 和 Windows (amd64)。
+
+### login.sh
+启动浏览器进行小红书登录，认证信息保存在本地。
+
+### start.sh
+启动 MCP 服务（无头模式），默认监听端口 18060。
+
+### stop.sh
+停止正在运行的 MCP 服务。
+
+### status.sh
+检查 xiaohongshu-mcp 的安装状态和运行状态。
 
 ## Git 信息
 
 - **远程仓库：** https://github.com/pearjelly/agent-skills.git
 - **当前分支：** main
-- **最新提交：** 0476eb5 init
+- **最新提交：** fa8c970 自动安装 xiaohonghu-mcp

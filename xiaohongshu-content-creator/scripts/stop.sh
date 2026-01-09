@@ -18,7 +18,7 @@ if [ ! -f "$PID_FILE" ]; then
     echo "未找到 PID 文件，尝试查找进程..."
 
     # 尝试查找进程
-    local pid=$(pgrep -f "xiaohongshu-mcp" 2>/dev/null || true)
+    pid=$(pgrep -f "xiaohongshu-mcp" 2>/dev/null || true)
 
     if [ -z "$pid" ]; then
         echo "xiaohongshu-mcp 未运行"
@@ -27,7 +27,7 @@ if [ ! -f "$PID_FILE" ]; then
 
     echo "找到进程: $pid"
 else
-    local pid=$(cat "$PID_FILE")
+    pid=$(cat "$PID_FILE")
 
     # 检查进程是否存在
     if ! kill -0 "$pid" 2>/dev/null; then

@@ -44,19 +44,24 @@ get_latest_version() {
     curl -sL -o /dev/null -w "%{url_effective}" "$RELEASE_URL" | sed 's/.*tag\///'
 }
 
-# 下载文件
-download_file() {
+# 下载并解压
+download_and_extract() {
     local url="$1"
-    local output="$2"
-    local version="$3"
+    local output_dir="$2"
 
     echo "下载: $url"
-    curl -sL "$url" -o "$output"
+    local tmp_file="/tmp/xiaohongshu-mcp-$$.tar.gz"
+    curl -fSL "$url" -o "$tmp_file"
 
-    if [ $? -ne 0 ] || [ ! -s "$output" ]; then
+    if [ $? -ne 0 ] || [ ! -s "$tmp_file" ]; then
         echo "下载失败: $url"
+        rm -f "$tmp_file"
         exit 1
     fi
+
+    tar -xzf "$tmp_file" -C "$output_dir"
+    rm -f "$tmp_file"
+    echo "解压完成"
 }
 
 # 主安装逻辑
@@ -73,19 +78,26 @@ main() {
     local version=$(get_latest_version)
     echo "最新版本: $version"
 
-    # 下载 xiaohongshu-mcp
-    local mcp_url="https://github.com/xpzouying/xiaohongshu-mcp/releases/download/${version}/xiaohongshu-mcp-${arch}"
-    local mcp_bin="${BIN_DIR}/xiaohongshu-mcp"
-    download_file "$mcp_url" "$mcp_bin" "$version"
+    # 下载并解压 xiaohongshu-mcp
+    local mcp_url="https://github.com/xpzouying/xiaohongshu-mcp/releases/download/${version}/xiaohongshu-mcp-${arch}.tar.gz"
+    download_and_extract "$mcp_url" "$BIN_DIR"
 
-    # 下载 xiaohongshu-login
-    local login_url="https://github.com/xpzouying/xiaohongshu-mcp/releases/download/${version}/xiaohongshu-login-${arch}"
-    local login_bin="${BIN_DIR}/xiaohongshu-login"
-    download_file "$login_url" "$login_bin" "$version"
+    # 重命名为简单名称
+    if [ -f "${BIN_DIR}/xiaohongshu-mcp-${arch}" ]; then
+        mv "${BIN_DIR}/xiaohongshu-mcp-${arch}" "${BIN_DIR}/xiaohongshu-mcp"
+    fi
+
+    # 如果有单独的登录工具，也处理
+    if [ -f "${BIN_DIR}/xiaohongshu-login-${arch}" ]; then
+        mv "${BIN_DIR}/xiaohongshu-login-${arch}" "${BIN_DIR}/xiaohongshu-login"
+    fi
 
     # 设置执行权限
-    chmod +x "$mcp_bin" "$login_bin"
+    chmod +x "${BIN_DIR}/xiaohongshu-mcp" "${BIN_DIR}/xiaohongshu-login" 2>/dev/null || true
     echo "设置执行权限完成"
+
+    # 清理可能的符号链接
+    rm -f "${BIN_DIR}/xiaohongshu-mcp.sym" 2>/dev/null || true
 
     echo ""
     echo "=========================================="
