@@ -1,4 +1,4 @@
-# Agent Skills 项目
+# xiaohongshu Skills 项目
 
 ## 项目概述
 
@@ -13,7 +13,7 @@
 ## 目录结构
 
 ```
-agent-skills/
+xiaohongshu-skills/
 ├── xiaohongshu-content-creator/
 │   ├── SKILL.md
 │   └── scripts/
@@ -222,6 +222,6 @@ cd ~/.claude/skills/xiaohongshu-content-creator && ./scripts/prepare.sh
 
 ## Git 信息
 
-- **远程仓库：** https://github.com/pearjelly/agent-skills.git
+- **远程仓库：** https://github.com/pearjelly/xiaohongshu-skills.git
 - **当前分支：** main
 - **最新提交：** 2272e71 更新项目文档
