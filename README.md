@@ -8,6 +8,7 @@
 
 **当前技能：**
 - **xiaohongshu-content-creator**：小红书爆款笔记创作技能
+- **xiaohongshu-content-promotion**：小红书内容推广技能
 
 ## 目录结构
 
@@ -23,6 +24,10 @@ agent-skills/
 │       ├── stop.sh         # 停止 MCP 服务
 │       ├── status.sh       # 状态检查脚本
 │       └── bin/            # 二进制文件目录（git 忽略）
+├── xiaohongshu-content-promotion/
+│   ├── SKILL.md            # 技能定义文件
+│   ├── EXAMPLES.md         # 使用示例
+│   └── REFERENCE.md        # API 参考文档
 ├── .gitignore
 ├── README.md
 └── IFLOW.md
@@ -69,6 +74,43 @@ agent-skills/
 
 **工具来源：** https://github.com/xpzouying/xiaohongshu-mcp
 
+## 技能：xiaohongshu-content-promotion
+
+### 功能
+这是一个**小红书内容推广技能**，通过在相关热门帖子下发布有针对性的评论，引导用户了解和使用推广的产品或服务。
+
+1. 搜索相关热门帖子
+2. 筛选未评论的高质量帖子
+3. 根据帖子内容撰写个性化评论
+4. 发布评论并记录结果
+
+### 核心能力
+- **精准搜索**：通过关键词和筛选条件找到目标用户聚集的内容
+- **智能筛选**：过滤已评论帖子，避免重复推广
+- **个性化评论**：根据帖子内容和场景撰写自然、有价值的评论
+- **记录管理**：自动记录已评论和失败的帖子，便于追踪效果
+
+### 使用场景
+- 推广微信小程序、APP、产品服务等
+- 在目标用户聚集的内容下方进行软性推广
+- 需要在评论区进行精准营销的场景
+
+### 依赖工具
+该技能依赖 `xiaohongshu-mcp` 工具集，包括：
+- `search_feeds` - 搜索热门内容
+- `get_feed_detail` - 获取帖子详情
+- `post_comment_to_feed` - 发表评论
+- `like_feed` - 点赞帖子
+- `favorite_feed` - 收藏帖子
+- `check_login_status` - 检查登录状态
+
+**工具来源：** https://github.com/xpzouying/xiaohongshu-mcp
+
+### 文档资源
+- **SKILL.md**：技能定义和详细操作流程
+- **EXAMPLES.md**：实际使用示例和最佳实践
+- **REFERENCE.md**：API 工具参考和数据结构说明
+
 ## 使用方法
 
 ### 安装和配置（xiaohongshu-content-creator）
@@ -100,6 +142,29 @@ agent-skills/
    ./scripts/stop.sh
    ```
 
+### 使用 xiaohongshu-content-promotion
+
+该技能需要先完成 xiaohongshu-mcp 的安装和配置（参考上述步骤），然后：
+
+1. **准备推广信息**
+   - 确定要推广的产品/服务名称和特点
+   - 准备已评论记录文件（JSON 格式，避免重复评论）
+
+2. **搜索相关帖子**
+   - 使用 `search_feeds` 工具搜索与产品相关的热门内容
+   - 设置合适的筛选条件（如"最多收藏"、"半年内"）
+
+3. **筛选和评论**
+   - 读取已评论记录，过滤掉已处理的帖子
+   - 根据帖子内容撰写个性化评论
+   - 使用 `post_comment_to_feed` 发表评论
+
+4. **更新记录**
+   - 将新评论的帖子信息添加到记录文件
+   - 记录失败的帖子及原因
+
+详细流程请参考 `xiaohongshu-content-promotion/SKILL.md`。
+
 ### 添加新技能
 1. 创建新的技能目录
 2. 在目录中创建 `SKILL.md` 文件
@@ -108,7 +173,7 @@ agent-skills/
 ### 使用现有技能
 当用户需要使用某个技能时，可以通过以下方式触发：
 - 使用技能名称命令（如 `/xiaohongshu-content-creator`）
-- 描述相关需求（如"帮我发个小红书"、"创作一篇关于xxx的笔记"）
+- 描述相关需求（如"帮我发个小红书"、"创作一篇关于xxx的笔记"、"在小红书上推广xxx产品"）
 
 ## 项目特点
 
@@ -117,6 +182,8 @@ agent-skills/
 - **可扩展性**：易于添加新的技能定义
 - **文档驱动**：完整的技能说明和使用指南
 - **自动化脚本**：提供安装、登录、启动、停止、状态检查等便捷脚本
+- **多场景覆盖**：涵盖内容创作和内容推广两大场景
+- **详细示例**：提供实际使用案例和 API 参考文档
 
 ## 脚本说明
 
@@ -149,4 +216,4 @@ cd ~/.claude/skills/xiaohongshu-content-creator && ./scripts/prepare.sh
 
 - **远程仓库：** https://github.com/pearjelly/agent-skills.git
 - **当前分支：** main
-- **最新提交：** fa8c970 自动安装 xiaohonghu-mcp
+- **最新提交：** 2272e71 更新项目文档
